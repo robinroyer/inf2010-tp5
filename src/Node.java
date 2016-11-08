@@ -57,18 +57,58 @@ public class Node {
     }
 
     public Node fusion(Node autre) throws DifferentOrderTrees {
-
+        if (ordre != autre.ordre) {
+            throw new DifferentOrderTrees();
+        }
         // à compléter
         return null;
     }
 
-    private void moveUp() {
-        // à compléter
+    private void moveUp() {        
+        if (this.parent == null)
+            return;
+        
+        // keeping ref to all object
+        Node parentPivot = this.parent;
+        Node grandParentPivot = this.parent.parent;
+        ArrayList<Node> enfantsPivot = this.getEnfants();        
+        ArrayList<Node> parentEnfantsPivot = this.parent.getEnfants();
+        // /!\ this is in this list => thats why we remove it
+        parentEnfantsPivot.remove(this);
+        
+        // changing grandParent
+        if (grandParentPivot != null) {
+            grandParentPivot.removeEnfant(parentPivot);
+            grandParentPivot.addEnfant(this);
+        }
+        
+        
+        // changing this
+        this.enfants = parentEnfantsPivot;
+        this.addEnfant(parentPivot);
+        this.parent = grandParentPivot;
+        
+        // changing old parent
+        parentPivot.enfants = enfantsPivot; 
+        parentPivot.parent = this;
+        
+        //changing old parent enfants
+        for (Node parentEnfants : parentEnfantsPivot) {
+            parentEnfants.parent = this;
+        }
+        
+        //changing old enfants
+        for (Node enfant : enfantsPivot) {
+            enfant.parent = parentPivot;
+        }
+        
     }
 
     public ArrayList<Node> delete() {
-        // à compléter
-        return null;
+        while (this.parent != null) {            
+            this.moveUp();
+        }
+        return this.getEnfants();
     }
 
     public void print(String tabulation) {
