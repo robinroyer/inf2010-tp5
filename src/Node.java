@@ -12,6 +12,8 @@ import java.util.ArrayList;
  */
 public class Node {
 
+    private static final String TAB = "\t";
+    
     public int ordre;
     public Node parent;
 
@@ -111,8 +113,25 @@ public class Node {
         return this.getEnfants();
     }
 
-    public void print(String tabulation) {
-        // à compléter
+    public void print(String tabulation, String firstTab) {
+        // print this.value
+        System.out.print(firstTab + this.getVal());
+        // call print on enfants
+        tabulation+= TAB;
+        if (enfants == null) {
+            System.out.println(""); // no more enfants => endline
+        }
+        else{
+            for (int i = 0; i < enfants.size(); i++) { 
+                if (i == 0) {
+                    enfants.get(i).print(tabulation, TAB);
+                }
+                else{
+                    enfants.get(i).print(tabulation, tabulation);
+                }
+            }
+        }
+        
     }
     
     public Node findValue(int valeur) {
