@@ -58,12 +58,25 @@ public class Node {
         this.enfants.removeAll(enfants);
     }
 
-    public Node fusion(Node autre) throws DifferentOrderTrees {
-        if (ordre != autre.ordre) {
+    public Node fusion(Node autre) throws DifferentOrderTrees, IsNotTreeException {
+        if (ordre != autre.ordre) 
             throw new DifferentOrderTrees();
+        
+        if(this.parent != null && autre.parent != null)
+            throw new IsNotTreeException();
+        
+        // The tree with the bigger root becomes an enfant of the other tree
+        Node newTree;
+        if (this.getVal() < autre.getVal()) {
+            newTree = this;
+            newTree.addEnfant(autre);
         }
-        // à compléter
-        return null;
+        else{
+            newTree = autre;
+            newTree.addEnfant(this);
+        }
+        
+        return newTree;
     }
 
     private void moveUp() {        
