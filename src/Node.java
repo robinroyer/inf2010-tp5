@@ -134,8 +134,20 @@ public class Node {
         
     }
     
-    public Node findValue(int valeur) {
-        // à compléter
-        return null;
+    public Node findValue(int valeur) {  
+        Node result = null;
+        
+        if (this.valeur == valeur)
+            return this;
+        
+        for (Node enfant : enfants) {
+            if (enfant.getVal() < valeur) {
+                result = enfant.findValue(valeur);
+                // => if value found
+                if(result != null)
+                    break;
+            }
+        }        
+        return result;
     }
 }
