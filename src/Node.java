@@ -143,8 +143,7 @@ public class Node {
                     enfants.get(i).print(tabulation, tabulation);
                 }
             }
-        }
-        
+        }        
     }
     
     public Node findValue(int valeur) {  
