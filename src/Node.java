@@ -12,40 +12,83 @@ import java.util.ArrayList;
  */
 public class Node {
 
+    /**
+     * tab char for display purpose
+     */
     private static final String TAB = "\t";
     
+    /**
+     * 
+     */
     public int ordre;
+    
+    /**
+     * Reference to the parent node
+     */
     public Node parent;
 
-    private int valeur;
+    /**
+     * Value hold by the node
+     */
+    private final int valeur;
+    
+    /**
+     * All the children
+     */
     private ArrayList<Node> enfants;
 
+    /**
+     * Constructor
+     * @param valeur node's value
+     */
     public Node(int valeur) {
         this.valeur = valeur;
         ordre = 0;
         this.parent = null;
-        enfants = new ArrayList<Node>();
+        enfants = new ArrayList<>();
     }
 
+    /**
+     * constuctor
+     * @param valeur node's value
+     * @param parent reference to the parent
+     */
     public Node(int valeur, Node parent) {
         ordre = 0;
         this.valeur = valeur;
         this.parent = parent;
-        enfants = new ArrayList<Node>();
+        enfants = new ArrayList<>();
     }
 
+    /**
+     * value getter
+     * @return int
+     */
     public int getVal() {
         return valeur;
     }
 
+    /**
+     * enfants getter
+     * @return ArrayList of children node
+     */
     public ArrayList<Node> getEnfants() {
         return enfants;
     }
 
+    /**
+     * Push an enfant to the node
+     * @param enfant 
+     */
     public void addEnfant(Node enfant) {
         enfants.add(enfant);
     }
 
+    /**
+     * Remove an enfant from the node
+     * @param enfant enfant to remove
+     * @return true if succeed
+     */
     public boolean removeEnfant(Node enfant) {
         if (enfants.contains(enfant)) {
             enfants.remove(enfant);
@@ -54,10 +97,23 @@ public class Node {
         return false;
     }
 
+    /**
+     * Empty a list of children's node
+     * @param enfants ArrayList<Node> of children to remove
+     */
     public void removeEnfants(ArrayList<Node> enfants) {
         this.enfants.removeAll(enfants);
     }
 
+    /**
+     * Merge 2 nodes together
+     * @param autre second node to merge
+     * @return the merged node
+     * 
+     * @throws DifferentOrderTrees execption if node are not the same level
+     * @throws IsNotTreeException  exception if this node are not tree
+     *          (parent should be null)
+     */
     public Node fusion(Node autre) throws DifferentOrderTrees, IsNotTreeException {
         if (ordre != autre.ordre) 
             throw new DifferentOrderTrees();
@@ -75,10 +131,13 @@ public class Node {
             newTree = autre;
             newTree.addEnfant(this);
         }
-        
+        newTree.ordre += 1;
         return newTree;
     }
 
+    /**
+     * Move up a node if he has a parent
+     */
     private void moveUp() {        
         if (this.parent == null)
             return;
@@ -96,7 +155,6 @@ public class Node {
             grandParentPivot.removeEnfant(parentPivot);
             grandParentPivot.addEnfant(this);
         }
-        
         
         // changing this
         this.enfants = parentEnfantsPivot;
@@ -119,6 +177,10 @@ public class Node {
         
     }
 
+    /**
+     * Delete this node from the tree by moving it to the top
+     * @return ArrayList of children node
+     */
     public ArrayList<Node> delete() {
         while (this.parent != null) {            
             this.moveUp();
@@ -126,15 +188,20 @@ public class Node {
         return this.getEnfants();
     }
 
+    /**
+     * Display a node to the screen recursively
+     * @param tabulation
+     * @param firstTab 
+     */
     public void print(String tabulation, String firstTab) {
         // print this.value
         System.out.print(firstTab + this.getVal());
         // call print on enfants
-        tabulation+= TAB;
-        if (enfants == null) {
+        if (enfants.isEmpty()) {
             System.out.println(""); // no more enfants => endline
         }
         else{
+            tabulation+= TAB;
             for (int i = 0; i < enfants.size(); i++) { 
                 if (i == 0) {
                     enfants.get(i).print(tabulation, TAB);
@@ -146,6 +213,11 @@ public class Node {
         }        
     }
     
+    /**
+     * search in this node and in its children if the value can be found
+     * @param valeur value to find
+     * @return reference to the node containing the value
+     */
     public Node findValue(int valeur) {  
         Node result = null;
         

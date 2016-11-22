@@ -1,19 +1,20 @@
-
 import java.util.ArrayList;
 
 public class Monceau {
-    ArrayList<Node> arbres;
+    public ArrayList<Node> arbres;
     
     /**
      * Default constructor
      */
     public Monceau() {
-        arbres = new ArrayList<Node>();
+        arbres = new ArrayList<>();
     }
     
     /**
-     * merge a monceau in this
+     * Merge a monceau in this
      * @param autre 
+     * @throws DifferentOrderTrees 
+     * @throws IsNotTreeException 
      */
     public void fusion(Monceau autre) throws DifferentOrderTrees, IsNotTreeException {
         for (Node arbre : autre.arbres) {
@@ -23,8 +24,9 @@ public class Monceau {
     
     /**
      * insert a value in a monceau
-     * @param val 
-     */
+     * @param val
+     * @throws DifferentOrderTrees
+     * @throws IsNotTreeException   */
     public void insert(int val) throws DifferentOrderTrees, IsNotTreeException {
         Node newNode = new Node(val);
         insert(newNode);
@@ -35,6 +37,8 @@ public class Monceau {
      * delete all value from a monceau
      * @param val
      * @return 
+     * @throws DifferentOrderTrees 
+     * @throws IsNotTreeException 
      */
     public boolean delete (int val) throws DifferentOrderTrees, IsNotTreeException {
         boolean hadDeleteSomethig = false;
@@ -78,15 +82,45 @@ public class Monceau {
      * @throws DifferentOrderTrees
      * @throws IsNotTreeException 
      */
-    private void insert(Node tree) throws DifferentOrderTrees, IsNotTreeException {        
-        for (Node arbre : arbres) {
-            if (arbre.ordre == tree.ordre) {
-                arbres.remove(arbre);
-                arbres.add(arbre.fusion(tree));
-            }            
-            else{
-                arbres.add(tree);
-            }
+    private void insert(Node tree) throws DifferentOrderTrees, IsNotTreeException {   
+        arbres.add(tree);  
+        // ENHANCEMENT: Optimization should be do here 
+        // ===>  bad complexity
+        while(!isCorrect()){
+            clean();
         }
     }
+    
+    
+    /**
+     * merge 2 same order trees
+     * @return 
+     */
+    private void clean() throws DifferentOrderTrees, IsNotTreeException{
+        for (Node arbre1 : arbres) {
+            for (Node arbre2 : arbres) {
+                if(arbre1.ordre == arbre2.ordre && arbre1 != arbre2) {
+                    arbres.add(arbre1.fusion(arbre2));
+                    arbres.remove(arbre1);
+                    arbres.remove(arbre2);
+                    return;
+                }
+            }            
+        }
+    }
+    
+    /**
+     * check that the monceau doesn't have 2 same order trees
+     * @return 
+     */
+    private boolean isCorrect(){
+        for (Node arbre1 : arbres) {
+            for (Node arbre2 : arbres) {
+                if(arbre1.ordre == arbre2.ordre && arbre1 != arbre2)
+                    return false;
+            }            
+        }
+        return true;
+    }
+    
 }
