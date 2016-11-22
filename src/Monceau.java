@@ -40,34 +40,41 @@ public class Monceau {
      * @throws DifferentOrderTrees 
      * @throws IsNotTreeException 
      */
-    public boolean delete (int val) throws DifferentOrderTrees, IsNotTreeException {
-        boolean hadDeleteSomethig = false;
-        Node NodeFound;
+    public void delete (int val) throws DifferentOrderTrees, IsNotTreeException {
         
+        Node NodeFound;
+        ArrayList<Node> arbreTmp;
+        ArrayList<Node> arbresTmp;  
+
+
+        arbresTmp= new ArrayList<>(); 
+
         for (Node arbre : arbres) {
-            NodeFound = null;
-            
-            // Delete all val from arbre
+            arbreTmp = new ArrayList<>();
+
             NodeFound = arbre.findValue(val);
-            // delete tree and merge back tree
+
             if (NodeFound != null) {
-                //remove tree for monceau trees
-                arbres.remove(arbre);
-                while (NodeFound != null) {
-                    // insert back tree 
-                    for (Node tree :NodeFound.delete()){
-                        insert(tree);
-                    }
-                    NodeFound = arbre.findValue(val);
-                }
+               arbreTmp = NodeFound.delete();
+               arbresTmp.addAll(arbreTmp);
             }
-            
-        }        
-        return hadDeleteSomethig;
+            else{
+                arbresTmp.add(arbre);
+            }
+        }  
+        arbres = arbresTmp;
+
+        while(!isCorrect()){
+            clean();
+        }
+        
+        if(contains(val)){
+            this.delete(val);
+        }
     }
     
     /**
-     * 
+     * display
      */
     public void print() {
         for (Node arbre : arbres) {
@@ -121,6 +128,20 @@ public class Monceau {
             }            
         }
         return true;
+    }
+    
+    /**
+     * check a value in all the trees
+     * @param value
+     * @return 
+     */
+    private boolean contains(int value){
+        for (Node arbre : arbres) {
+            if(arbre.findValue(value) != null){
+                return true;
+            }
+        }
+        return false;
     }
     
 }

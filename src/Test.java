@@ -11,10 +11,9 @@
 public class Test {
     public static void main(String[] args) throws DifferentOrderTrees, IsNotTreeException {
         Monceau monceau1 = new Monceau();
-//        Monceau monceau2 = new Monceau();
+        Monceau monceau2 = new Monceau();
         
         monceau1.insert(1);        
-        
         monceau1.insert(2);
         monceau1.insert(3);
         monceau1.insert(4);
@@ -23,6 +22,7 @@ public class Test {
         monceau1.insert(7);
         monceau1.insert(8);
         monceau1.insert(9);
+        monceau1.insert(-1);        
         monceau1.insert(-1);
         monceau1.insert(-2);
         monceau1.insert(-3);
@@ -33,25 +33,24 @@ public class Test {
         monceau1.insert(-8);
         monceau1.insert(-9);
                        
-//        monceau2.fusion(monceau1);
+        monceau2.fusion(monceau1);
         
         System.out.println("the 2 monceau should print the same thing ....");
-//        System.out.println(monceau1.arbres.get(0).getEnfants().get(0).getVal());
+        
         monceau1.print();
-//        monceau2.print();
-//        
-//        monceau1.delete(-1);
-//        monceau1.delete(-2);
-//        monceau1.delete(-3);
-//        monceau1.delete(-4);
-//        monceau1.delete(-5);
-//        monceau1.delete(-6);
-//        monceau1.delete(-7);
-//        monceau1.delete(-8);
-//        monceau1.delete(-9);
-//        
-//        System.out.println("Suppression des .... nombre negatifs");
-//        
-//        monceau1.print();
+        monceau2.print();
+        
+        monceau1.delete(-1);
+        monceau1.delete(-2);
+        monceau1.delete(-3);
+        monceau1.delete(-4);
+        monceau1.delete(-5);
+        monceau1.delete(-6);
+        monceau1.delete(-7);
+        monceau1.delete(-8);
+        monceau1.delete(-9);
+        System.out.println("Suppression des .... nombre negatifs");
+       
+        monceau1.print();
     }
 }

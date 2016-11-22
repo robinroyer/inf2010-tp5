@@ -99,11 +99,11 @@ public class Node {
 
     /**
      * Empty a list of children's node
-     * @param enfants ArrayList<Node> of children to remove
+     * @param enfants ArrayList of children to remove
      */
-    public void removeEnfants(ArrayList<Node> enfants) {
-        this.enfants.removeAll(enfants);
-    }
+//    public void removeEnfants(ArrayList<Node> enfants) {
+//        this.enfants.removeAll(enfants);
+//    }
 
     /**
      * Merge 2 nodes together
@@ -126,11 +126,14 @@ public class Node {
         if (this.getVal() < autre.getVal()) {
             newTree = this;
             newTree.addEnfant(autre);
+            autre.parent = this;
         }
         else{
             newTree = autre;
             newTree.addEnfant(this);
+            this.parent = newTree;
         }
+        newTree.parent = null;
         newTree.ordre += 1;
         return newTree;
     }
@@ -138,7 +141,7 @@ public class Node {
     /**
      * Move up a node if he has a parent
      */
-    private void moveUp() {        
+    private void moveUp() {    
         if (this.parent == null)
             return;
         
@@ -164,6 +167,7 @@ public class Node {
         // changing old parent
         parentPivot.enfants = enfantsPivot; 
         parentPivot.parent = this;
+        parentPivot.ordre--;
         
         //changing old parent enfants
         for (Node parentEnfants : parentEnfantsPivot) {
@@ -174,7 +178,6 @@ public class Node {
         for (Node enfant : enfantsPivot) {
             enfant.parent = parentPivot;
         }
-        
     }
 
     /**
@@ -184,6 +187,10 @@ public class Node {
     public ArrayList<Node> delete() {
         while (this.parent != null) {            
             this.moveUp();
+        }
+        
+        for (Node enfant : enfants) {
+            enfant.parent = null;
         }
         return this.getEnfants();
     }
@@ -225,13 +232,13 @@ public class Node {
             return this;
         
         for (Node enfant : enfants) {
-            if (enfant.getVal() < valeur) {
+            if (enfant.getVal() <= valeur) {
                 result = enfant.findValue(valeur);
                 // => if value found
                 if(result != null)
-                    break;
+                    return result;
             }
-        }        
+        }
         return result;
     }
 }
